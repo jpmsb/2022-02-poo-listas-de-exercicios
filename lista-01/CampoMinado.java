@@ -12,7 +12,6 @@ public class CampoMinado {
         }
 
         int contador = 0;
-        System.out.println(minas);
 
         // Criando a matriz
         for (int i = 0; i < tamanho; i++) {
