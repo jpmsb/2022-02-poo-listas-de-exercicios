@@ -27,7 +27,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'engtelecom.poo.App'
+    mainClass = 'engtelecom.poo.Principal'
 }
 
 tasks.named('test') {
