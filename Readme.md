@@ -7,3 +7,4 @@
 ## Listas
 
  - [Lista 01](lista-01) - Sistema de Controle de Versão
+ - [Lista 02](lista-02) - Introdução à linguagem Java
