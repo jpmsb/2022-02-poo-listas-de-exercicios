@@ -1,0 +1,1 @@
+![Captura de tela](captura.png "Captura de tela da aplicação")
