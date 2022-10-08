@@ -1,13 +1,14 @@
 package engtelecom.poo;
 
+import java.awt.Color;
+
 import edu.princeton.cs.algs4.Draw;
 
 public class Principal {
-    private static Draw desenho = new Draw();
+    private static Draw desenho;
 
     public Principal(){
         this.desenho = new Draw();
-
         // definindo a área de desenho -- https://introcs.cs.princeton.edu/java/stdlib/javadoc/Draw.html
         this.desenho.setCanvasSize(600,600);
 
@@ -18,6 +19,9 @@ public class Principal {
     }
 
     public static void main(String[] args) {
-        
+        Principal p = new Principal();
+
+        Relogio r = new Relogio(800, 900, 14, "Brasília");
+        r.desenhar(Principal.desenho, 7, 30, 15);
     }
 }
