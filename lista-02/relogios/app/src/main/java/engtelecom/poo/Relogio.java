@@ -16,7 +16,7 @@ public class Relogio {
     public Relogio(int x, int y, int fuso, String nome){
         this(x, y);
         this.nome = nome;
-        this.fuso = (fuso >= -1 && fuso <= 14) ? fuso : 0;
+        this.fuso = (fuso >= -12 && fuso <= 14) ? fuso : 0;
 
     }
 

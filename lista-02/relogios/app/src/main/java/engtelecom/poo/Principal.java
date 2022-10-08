@@ -50,6 +50,9 @@ public class Principal {
         Relogio r3 = new Relogio(150, 150, 1, "Inglaterra");
         adicionarRelogio(r3);
 
+        Relogio r4 = new Relogio(450, 150, -4, "Nova Iorque");
+        adicionarRelogio(r4);
+
         desenharRelogios();
     }
 }
