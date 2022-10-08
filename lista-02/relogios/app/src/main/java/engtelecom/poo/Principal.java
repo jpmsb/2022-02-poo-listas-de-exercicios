@@ -6,6 +6,7 @@ import edu.princeton.cs.algs4.Draw;
 
 public class Principal {
     private static Draw desenho;
+    private static Relogio[] relogios = new Relogio[3];
 
     public Principal(){
         this.desenho = new Draw();
@@ -18,10 +19,37 @@ public class Principal {
         this.desenho.setYscale(0, 600);
     }
 
+
+    public static boolean adicionarRelogio(Relogio relogio){
+        for (int j = 0; j < relogios.length; j++){
+            if (relogios[j] == null) {
+                relogios[j] = relogio;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void desenharRelogios(){
+        for (Relogio relogio : relogios) {
+            relogio.desenhar(desenho, 7, 45, 15);
+        }
+
+    }
+
     public static void main(String[] args) {
         Principal p = new Principal();
 
-        Relogio r = new Relogio(800, 900, 14, "Brasília");
-        r.desenhar(Principal.desenho, 7, 30, 15);
+        Relogio r = new Relogio(150, 450, -1, "Brasília");
+        adicionarRelogio(r);
+
+        Relogio r2 = new Relogio(450, 450, 9, "Japão");
+        adicionarRelogio(r2);
+
+        Relogio r3 = new Relogio(150, 150, 1, "Inglaterra");
+        adicionarRelogio(r3);
+
+        desenharRelogios();
     }
 }

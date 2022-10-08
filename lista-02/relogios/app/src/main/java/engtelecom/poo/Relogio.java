@@ -20,10 +20,6 @@ public class Relogio {
 
     }
 
-    public void setFuso(int fuso) {
-        this.fuso = fuso;
-    }
-
     public void desenhar(Draw tela, int hora, int minuto, int segundo){
         int horaAjustada = hora + this.fuso;
         if (fuso > -12 && fuso < 12){
@@ -45,6 +41,8 @@ public class Relogio {
         double r5 = 100;
 
         // Desenha o cículo na tela
+        tela.setPenRadius(0.002);
+        tela.setPenColor(tela.BLACK);
         tela.circle(this.coordenadaX, this.coordenadaY, 100);
 
         // Desenha os tracejados que representam os números de 1 a 12
