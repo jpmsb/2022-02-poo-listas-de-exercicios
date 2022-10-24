@@ -24,6 +24,13 @@ public class RoboTest {
         assertNotEquals(200, r2.getCoordenadaAtualY());
         assertNotEquals(200, r2.getCoordenadaAnteriorX());
         assertNotEquals(200, r2.getCoordenadaAnteriorY());
+
+        Robo r3 = new Robo("Robô 1", 100, 5, 200, "Norte", 70, 1);
+
+        assertEquals(5, r3.getCoordenadaAtualX());
+        assertNotEquals(200, r3.getCoordenadaAtualY());
+        assertEquals(5, r3.getCoordenadaAnteriorX());
+        assertNotEquals(200, r3.getCoordenadaAnteriorY());
     }
 
     @Test
@@ -56,6 +63,7 @@ public class RoboTest {
         assertEquals(5, r.getCoordenadaAnteriorX());
         assertEquals(6, r.getCoordenadaAnteriorY());
 
+        // Deslocar na direção X duas vezes
         r.girarParaDireita();
         r.deslocar();
         r.deslocar();
@@ -80,22 +88,55 @@ public class RoboTest {
 
     @Test
     void validarDeslocamento(){
-        Robo r = new Robo("Robô 1", 100, 5, 5, "Norte", 70, 1);
+        Robo r = new Robo("Robô 1", 4, 1, 1, "Norte", 70, 1);
 
+        // Deslocamento na vertical
         assertTrue(r.deslocar());
-        assertEquals(6, r.getCoordenadaAtualY());
+        assertEquals(2, r.getCoordenadaAtualY());
+        assertEquals(1, r.getCoordenadaAtualX());
+
+        assertFalse(r.deslocar());
+        assertEquals(2, r.getCoordenadaAtualY());
+        assertEquals(1, r.getCoordenadaAtualX());
 
         r.girarParaDireita();
-        assertTrue(r.deslocar());
-        assertEquals(6, r.getCoordenadaAtualX());
-
         r.girarParaDireita();
         assertTrue(r.deslocar());
-        assertEquals(5, r.getCoordenadaAtualY());
+        assertEquals(1, r.getCoordenadaAtualY());
+        assertEquals(1, r.getCoordenadaAtualX());
 
+        assertTrue(r.deslocar());
+        assertEquals(0, r.getCoordenadaAtualY());
+        assertEquals(1, r.getCoordenadaAtualX());
+
+        assertFalse(r.deslocar());
+        assertEquals(0, r.getCoordenadaAtualY());
+        assertEquals(1, r.getCoordenadaAtualX());
+
+        // Deslocamento horizontal
         r.girarParaEsquerda();
         assertTrue(r.deslocar());
-        assertEquals(5, r.getCoordenadaAtualX());
+        assertEquals(2, r.getCoordenadaAtualX());
+        assertEquals(0, r.getCoordenadaAtualY());
+
+        assertFalse(r.deslocar());
+        assertEquals(2, r.getCoordenadaAtualX());
+        assertEquals(0, r.getCoordenadaAtualY());
+
+        r.girarParaEsquerda();
+        r.girarParaEsquerda();
+        assertTrue(r.deslocar());
+        assertEquals(1, r.getCoordenadaAtualX());
+        assertEquals(0, r.getCoordenadaAtualY());
+
+        assertTrue(r.deslocar());
+        assertEquals(0, r.getCoordenadaAtualX());
+        assertEquals(0, r.getCoordenadaAtualY());
+
+        assertFalse(r.deslocar());
+        assertEquals(0, r.getCoordenadaAtualX());
+        assertEquals(0, r.getCoordenadaAtualY());
+
     }
 
     @Test
@@ -117,5 +158,43 @@ public class RoboTest {
         assertTrue(r.executarPlano());
         assertTrue(r.executarPlano());
         assertFalse(r.executarPlano());
+    }
+
+    @Test
+    void limiteDeUnidadesAlemDoPermitido(){
+        Robo r = new Robo("Robô 1", 400, 5, 5, "Norte", 70, 150);
+
+        assertEquals(100, r.getUnidadesPorMovimento());
+    }
+
+    @Test
+    void obterMovimentosRestantes(){
+        Robo r = new Robo("Robô 1", 100, 5, 5, "Norte", 70, 1);
+
+        r.carregarPlano("MEDME");
+        assertTrue(r.executarPlano());
+        assertTrue(r.executarPlano());
+        assertTrue(r.executarPlano());
+        assertTrue(r.executarPlano());
+
+        assertEquals(66, r.getMovimentosRestantes());
+
+        assertTrue(r.executarPlano());
+        assertFalse(r.executarPlano());
+
+        assertEquals(65, r.getMovimentosRestantes());
+    }
+
+    @Test
+    void planoDeExploracaoParcial(){
+        Robo r = new Robo("Robô 1", 100, 5, 5, "Norte", 70, 1);
+
+        r.carregarPlano("MEDMEEMDM");
+        assertTrue(r.executarPlano());
+        assertTrue(r.executarPlano());
+        assertTrue(r.executarPlano());
+        assertTrue(r.executarPlano());
+
+        assertEquals("EEMDM", r.planoDeExploracaoRestante());
     }
 }

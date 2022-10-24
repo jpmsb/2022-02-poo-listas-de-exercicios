@@ -1,5 +1,9 @@
 package engtelecom.poo;
 
+import java.util.Random;
+
+import org.checkerframework.framework.qual.Unused;
+
 public class Robo {
     /**
      * Identificador único do robô
@@ -32,6 +36,16 @@ public class Robo {
     private int coordenadaAnteriorY;
 
     /**
+     * Valor máximo da coordenada X
+     */
+    private int coordenadaXMaxima;
+
+    /**
+     * Valor máximo da coordenada Y
+     */
+    private int coordenadaYMaxima;
+
+    /**
      * Direção para onde o robô estará apontando
      */
     private String direcao;
@@ -54,7 +68,12 @@ public class Robo {
     /**
      * Posição atual do plano de exploração
      */
-    private int posicaoPlanoExploracao;
+    private int posicaoPlanoExploracao = 0;
+
+    /**
+     * Sequência de caracteres indicando o plano de exploração
+     */
+    private String planoDeExploracao[];
 
     /**
      * Quantidade máxima total que um robô poderá fazer
@@ -70,6 +89,27 @@ public class Robo {
      * Contém a posição que será usada no vetor de direções
      */
     private int posicaoDirecao;
+
+    /**
+     * A direção Norte
+     */
+    private static final String NORTE = "Norte";
+
+    /**
+     * A direção Sul
+     */
+    private static final String SUL = "Sul";
+
+    /**
+     * A direção Leste
+     */
+    private static final String LESTE = "Leste";
+
+    /**
+     * A direção Oeste
+     */
+    private static final String OESTE = "Oeste";
+
 
 
     /**
@@ -87,13 +127,16 @@ public class Robo {
     public Robo(String identificador, int area, int coordenadaAtualX, int coordenadaAtualY, String direcao, int movimentosMaximos, int unidadesPorMovimento) {
         this.identificador = identificador;
         this.area = area;
-        this.coordenadaAtualX = coordenadaAtualX;
-        this.coordenadaAtualY = coordenadaAtualY;
+        this.coordenadaAtualX = setCoordenada(coordenadaAtualX);
+        this.coordenadaAtualY = setCoordenada(coordenadaAtualY);
         this.coordenadaAnteriorX = this.coordenadaAtualX;
         this.coordenadaAnteriorY = this.coordenadaAtualY;
-        this.direcao = direcao;
+        setDirecao(direcao);
         this.movimentosMaximos = movimentosMaximos;
-        this.unidadesPorMovimento = unidadesPorMovimento;
+        this.movimentosRestantes = this.movimentosMaximos;
+        setUnidadesPorMovimento(unidadesPorMovimento);
+        this.coordenadaXMaxima = (int) Math.sqrt(area);
+        this.coordenadaYMaxima = this.coordenadaXMaxima;
     }
 
     /**
@@ -144,19 +187,17 @@ public class Robo {
     }
 
     /**
-     * Define a coordenada X atual do robô
-     * @param coordenadas inteiro com a coordenada X do robô
+     * Define uma coordenada válida
+     * @param coordenada inteiro contendo uma coordenada
+     * @return inteiro com uma coordenada dentro da área de exploração
      */
-    public void setCoordenadaAtualX(int coordenada) {
-        this.coordenadaAtualX = coordenada;
-    }
-
-    /**
-     * Define a coordenada Y atual do robô
-     * @param coordenadas inteiro com a coordenada Y do robô
-     */
-    public void setCoordenadaAtualY(int coordenada) {
-        this.coordenadaAtualY = coordenada;
+    private int setCoordenada(int coordenada){
+        double coordenadaXMax = Math.sqrt(this.area);
+        if (coordenada <= coordenadaXMax) return coordenada;
+        else {
+            Random numeroAleatorio = new Random();
+            return numeroAleatorio.nextInt((int)coordenadaXMax);
+        }
     }
 
     /**
@@ -172,7 +213,14 @@ public class Robo {
      * @param direcao 
      */
     public void setDirecao(String direcao) {
-        this.direcao = direcao;
+        this.direcao = NORTE;
+        for (int i = 0; i < direcoes.length; i++) {
+            if (direcoes[i].equals(direcao)){
+                this.direcao = direcao;
+                this.posicaoDirecao = i;
+                break;
+            }
+        }
     }
 
     /**
@@ -196,7 +244,7 @@ public class Robo {
      * @return inteiro com a quantidade de unidades que serão realizadas por movimento
      */
     public int getUnidadesPorMovimento() {
-        return unidadesPorMovimento;
+        return this.unidadesPorMovimento;
     }
 
     /**
@@ -204,7 +252,8 @@ public class Robo {
      * @param unidadesPorMovimento quantidade de unidades que serão realizadas por movimento
      */
     public void setUnidadesPorMovimento(int unidadesPorMovimento) {
-        this.unidadesPorMovimento = unidadesPorMovimento;
+        if (unidadesPorMovimento > LIMITE_DE_MOVIMENTOS) this.unidadesPorMovimento = LIMITE_DE_MOVIMENTOS;
+        else this.unidadesPorMovimento = unidadesPorMovimento;
     }
   
     /**
@@ -236,6 +285,29 @@ public class Robo {
      * @return verdadeiro se foi possível realizar o movimento ou falso, caso contrário.
      */
     public boolean deslocar(){
+        if (this.movimentosRestantes != 0){
+            if (this.direcao.equals(NORTE) && (! (this.coordenadaAtualY + unidadesPorMovimento > this.coordenadaXMaxima))){
+                this.coordenadaAnteriorY = this.coordenadaAtualY;
+                this.coordenadaAtualY += unidadesPorMovimento;
+                this.movimentosRestantes--;
+                return true;
+            } else if (this.direcao.equals(SUL) && (! (this.coordenadaAtualY - this.unidadesPorMovimento < 0))){
+                this.coordenadaAnteriorY = this.coordenadaAtualY;
+                this.coordenadaAtualY -= unidadesPorMovimento;
+                this.movimentosRestantes--;
+                return true;
+            } else if (this.direcao.equals(LESTE) && (! (this.coordenadaAtualX + unidadesPorMovimento > this.coordenadaXMaxima))){
+                this.coordenadaAnteriorX = this.coordenadaAtualX;
+                this.coordenadaAtualX += unidadesPorMovimento;
+                this.movimentosRestantes--;
+                return true;
+            } else if (this.direcao.equals(OESTE) && (! (this.coordenadaAtualX - unidadesPorMovimento < 0))){
+                this.coordenadaAnteriorX = this.coordenadaAtualX;
+                this.coordenadaAtualX -= unidadesPorMovimento;
+                this.movimentosRestantes--;
+                return true;
+            }
+        }
         return false;
     }
     
@@ -244,6 +316,12 @@ public class Robo {
      * @return string contendo o nome da nova direção
      */
     public String girarParaEsquerda(){
+        if (this.movimentosRestantes != 0){
+            if (this.posicaoDirecao == 0) this.posicaoDirecao = this.direcoes.length - 1;
+            else this.posicaoDirecao--;
+            this.direcao = this.direcoes[this.posicaoDirecao];
+            this.movimentosRestantes--;
+        }
         return this.direcao;
     }
 
@@ -252,6 +330,11 @@ public class Robo {
      * @return string contendo o nome da nova direção
      */
     public String girarParaDireita(){
+        if (this.movimentosRestantes != 0){
+            this.posicaoDirecao = (this.posicaoDirecao+1) % direcoes.length;
+            this.direcao =this.direcoes[this.posicaoDirecao];
+            this.movimentosRestantes--;
+        }
         return this.direcao;
     }
 
@@ -260,7 +343,15 @@ public class Robo {
      * @return verdadeiro caso o carregamento seja bem sucedido e falso, caso contrário.
      */
     public boolean carregarPlano(String plano){
-        return false;
+        this.planoDeExploracao = new String[plano.length()];
+        for (int i = 0; i < plano.length(); i++) {
+            if (plano.charAt(i) == 'D' | plano.charAt(i) == 'E' | plano.charAt(i) == 'M'){
+                planoDeExploracao[i] = String.valueOf(plano.charAt(i));
+            } else return false;
+
+        }
+        System.out.println(planoDeExploracao.length + " " + plano.length());
+        return true;
     }
 
     /**
@@ -268,8 +359,33 @@ public class Robo {
      * @return verdadeiro caso a execução seja possível e falso, caso contrário.
      */
     public boolean executarPlano(){
+        if (this.movimentosRestantes != 0 | posicaoPlanoExploracao != planoDeExploracao.length - 1){
+            if (planoDeExploracao[posicaoPlanoExploracao].equals("D")){
+                posicaoPlanoExploracao++;
+                this.girarParaDireita();
+                return true;
+            } else if (planoDeExploracao[posicaoPlanoExploracao].equals("E")){
+                posicaoPlanoExploracao++;
+                this.girarParaEsquerda();
+                return true;
+            } else if (planoDeExploracao[posicaoPlanoExploracao].equals("M")){
+                posicaoPlanoExploracao++;
+                return this.deslocar();
+            }
+        }
         return false;
     }
 
+    /**
+     * Obtém o plano de exploração que ainda resta ser executado
+     * @return string contendo os comandos restantes
+     */
+    public String planoDeExploracaoRestante(){
+        String retorno = "";
+        for (int j = posicaoPlanoExploracao; j < planoDeExploracao.length; j++) {
+            retorno += planoDeExploracao[j];
+        }
 
+        return retorno;
+    }
 }
