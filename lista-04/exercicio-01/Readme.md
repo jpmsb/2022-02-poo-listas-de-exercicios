@@ -1,0 +1,1 @@
+![Diagrama de classes do exercício 1](lista-04-exercicio-01.png)
