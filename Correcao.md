@@ -13,8 +13,14 @@
 - Nota: 10
 
 
-# Lista 03
+## Lista 03
 
 - Tudo ok
 - Data de entrega: 24/10/2022
 - Nota: 10
+
+## Lista 04
+
+- Não entregou
+- Nota: 0
+  
