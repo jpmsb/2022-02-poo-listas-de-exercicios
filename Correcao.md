@@ -21,6 +21,6 @@
 
 ## Lista 04
 
-- Não entregou
-- Nota: 0
+- Tudo ok, mas entregou 5 dias após o prazo
+- Nota: 9
   
