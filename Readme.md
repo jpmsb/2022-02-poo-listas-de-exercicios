@@ -10,3 +10,4 @@
  - [Lista 02](lista-02) - Introdução à linguagem Java
  - [Lista 03](lista-03) - Modelagem de classe e teste de unidade
  - [Lista 04](lista-04) - Modelagem de classes com associação
+ - [Lista 05](lista-05) - Herança e polimorfismo
