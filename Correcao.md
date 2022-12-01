@@ -23,4 +23,9 @@
 
 - Tudo ok, mas entregou 5 dias após o prazo
 - Nota: 9
-  
+    
+## Lista 05
+
+- O uso do polimorfismo indicado não está correto. Você deveria invocar métodos de uma referência de tipo mais genérico e não de tipos específicos (como Ferrari)
+- Nota: 10
+
